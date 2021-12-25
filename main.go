@@ -24,10 +24,10 @@ func main() {
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation email at %v\n", firstName, lastName, userTickets, emailAddress)
 	remainingTickets = totalTickets - userTickets
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
-	var bookings [50] string
-	bookings[0] = firstName + " " + lastName
-	fmt.Printf("Array = %v\n", bookings)
+	var bookings [] string
+	bookings = append(bookings, firstName + " " + lastName)
+	fmt.Printf("Slice = %v\n", bookings)
 	fmt.Printf("First Value = %v\n", bookings[0])
-	fmt.Printf("Array Type = %T\n", bookings)
-	fmt.Printf("Array Length= %v\n", len(bookings))
+	fmt.Printf("Slice Type = %T\n", bookings)
+	fmt.Printf("Slice Length= %v\n", len(bookings))
 }
