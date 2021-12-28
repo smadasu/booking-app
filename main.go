@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"booking-app/helper"
 )
 
 var conferenceName = "Go Conference"
@@ -14,7 +15,7 @@ func main() {
 	greetUsers()
 	for {
 		userTickets, firstName, lastName, emailAddress := getUserInput()
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, emailAddress, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, emailAddress, userTickets, remainingTickets)
 		if !isValidName {
 			fmt.Println("Firstname or Last Name should have more than 2 characters")
 		} else if !isValidEmail {
@@ -55,13 +56,6 @@ func getUserInput() (uint, string, string, string) {
 	fmt.Println("Please enter your email address")
 	fmt.Scan(&emailAddress)
 	return userTickets, firstName, lastName, emailAddress
-}
-
-func validateUserInput(firstName string, lastName string, emailAddress string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(emailAddress, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketNumber
 }
 
 func printFirstNames(bookings []string) {
