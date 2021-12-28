@@ -3,14 +3,20 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strconv"
 )
 
 var conferenceName = "Go Conference"
 const totalTickets = 50
 var remainingTickets uint = 50
 var firstNames = []string{}
-var bookings []map[string]string	
+var bookings []UserData
+
+type UserData struct {
+	firstName string
+	lastName string
+	emailAddress string
+	userTickets uint
+}
 	
 func main() {
 	greetUsers()
@@ -24,11 +30,12 @@ func main() {
 		} else if !isValidTicketNumber {
 			fmt.Printf("required tickets %v cannot be more than remaining %v tickets\n", userTickets, remainingTickets)
 		} else {
-			var userData = make(map[string]string)
-			userData["firstName"] = firstName
-			userData["lastName"] = lastName
-			userData["emailAddress"] = emailAddress
-			userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+			var userData = UserData {
+				firstName: firstName,
+				lastName: lastName,
+				emailAddress: emailAddress,
+				userTickets: userTickets,
+			}
 			bookTickets(userData)
 			if remainingTickets == 0 {
 				fmt.Println("Conference is sold out")
@@ -38,11 +45,10 @@ func main() {
 	}
 }
 
-func bookTickets(userData map[string]string) {
+func bookTickets(userData UserData) {
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation email at %v\n", 
-				userData["firstName"], userData["lastName"], userData["userTickets"], userData["emailAddress"])
-	var userTicks, _ = strconv.ParseUint(userData["userTickets"], 10, 64)
-	remainingTickets = remainingTickets - uint(userTicks)
+				userData.firstName, userData.lastName, userData.userTickets, userData.emailAddress)
+	remainingTickets = remainingTickets - userData.userTickets
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 	bookings = append(bookings, userData)
 	printFirstNames()
@@ -68,7 +74,7 @@ func getUserInput() (uint, string, string, string) {
 
 func printFirstNames() {
 	for _, booking := range bookings {
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 }
 
