@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"booking-app/helper"
+	"fmt"
+	"strconv"
 )
 
 var conferenceName = "Go Conference"
@@ -21,9 +21,14 @@ func main() {
 		} else if !isValidEmail {
 			fmt.Println("Invalid Email Address")
 		} else if !isValidTicketNumber {
-			fmt.Printf("required tickets %v cannot be more than remaining %v tickets", userTickets, remainingTickets)
+			fmt.Printf("required tickets %v cannot be more than remaining %v tickets\n", userTickets, remainingTickets)
 		} else {
-			bookTickets(firstName, lastName, userTickets, emailAddress)
+			var userData = make(map[string]string)
+			userData["firstName"] = firstName
+			userData["lastName"] = lastName
+			userData["emailAddress"] = emailAddress
+			userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+			bookTickets(userData)
 			if remainingTickets == 0 {
 				fmt.Println("Conference is sold out")
 				break
@@ -32,12 +37,14 @@ func main() {
 	}
 }
 
-func bookTickets(firstName string, lastName string, userTickets uint, emailAddress string) {
-	fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation email at %v\n", firstName, lastName, userTickets, emailAddress)
-	remainingTickets = remainingTickets - userTickets
+func bookTickets(userData map[string]string) {
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation email at %v\n", 
+				userData["firstName"], userData["lastName"], userData["userTickets"], userData["emailAddress"])
+	var userTicks, _ = strconv.ParseUint(userData["userTickets"], 10, 64)
+	remainingTickets = remainingTickets - uint(userTicks)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
-	var bookings []string
-	bookings = append(bookings, firstName+" "+lastName)
+	var bookings []map[string]string	
+	bookings = append(bookings, userData)
 	printFirstNames(bookings)
 	fmt.Printf("The first names of bookings are = %v\n", firstNames)
 }
@@ -58,9 +65,9 @@ func getUserInput() (uint, string, string, string) {
 	return userTickets, firstName, lastName, emailAddress
 }
 
-func printFirstNames(bookings []string) {
+func printFirstNames(bookings []map[string]string) {
 	for _, booking := range bookings {
-		firstNames = append(firstNames, strings.Fields(booking)[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 }
 
