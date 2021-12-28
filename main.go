@@ -10,7 +10,8 @@ var conferenceName = "Go Conference"
 const totalTickets = 50
 var remainingTickets uint = 50
 var firstNames = []string{}
-
+var bookings []map[string]string	
+	
 func main() {
 	greetUsers()
 	for {
@@ -43,10 +44,10 @@ func bookTickets(userData map[string]string) {
 	var userTicks, _ = strconv.ParseUint(userData["userTickets"], 10, 64)
 	remainingTickets = remainingTickets - uint(userTicks)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
-	var bookings []map[string]string	
 	bookings = append(bookings, userData)
-	printFirstNames(bookings)
+	printFirstNames()
 	fmt.Printf("The first names of bookings are = %v\n", firstNames)
+	fmt.Printf("The bookings are = %v\n", bookings)
 }
 
 func getUserInput() (uint, string, string, string) {
@@ -65,7 +66,7 @@ func getUserInput() (uint, string, string, string) {
 	return userTickets, firstName, lastName, emailAddress
 }
 
-func printFirstNames(bookings []map[string]string) {
+func printFirstNames() {
 	for _, booking := range bookings {
 		firstNames = append(firstNames, booking["firstName"])
 	}
