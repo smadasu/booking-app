@@ -3,6 +3,7 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
+	"time"
 )
 
 var conferenceName = "Go Conference"
@@ -48,6 +49,7 @@ func main() {
 func bookTickets(userData UserData) {
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation email at %v\n", 
 				userData.firstName, userData.lastName, userData.userTickets, userData.emailAddress)
+	go sendTicket(userData)
 	remainingTickets = remainingTickets - userData.userTickets
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 	bookings = append(bookings, userData)
@@ -57,18 +59,18 @@ func bookTickets(userData UserData) {
 }
 
 func getUserInput() (uint, string, string, string) {
-	var userTickets uint
-	fmt.Println("Please enter the number of tickets needed")
-	fmt.Scan(&userTickets)
 	var firstName string
 	var lastName string
 	var emailAddress string
+	var userTickets uint
 	fmt.Println("Please enter your first name")
 	fmt.Scan(&firstName)
 	fmt.Println("Please enter your last name")
 	fmt.Scan(&lastName)
 	fmt.Println("Please enter your email address")
 	fmt.Scan(&emailAddress)
+	fmt.Println("Please enter the number of tickets needed")
+	fmt.Scan(&userTickets)
 	return userTickets, firstName, lastName, emailAddress
 }
 
@@ -82,4 +84,12 @@ func greetUsers() {
 	fmt.Printf("Welcome to %v booking application\n", conferenceName)
 	fmt.Println("Get your tickets here to attend")
 	fmt.Printf("We have total of %v tickets and are %v still available\n",totalTickets, remainingTickets)
+}
+
+func sendTicket(userData UserData) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userData.userTickets, userData.firstName, userData.lastName)
+	fmt.Println("*****************")
+	fmt.Printf("Sending ticket:\n %v \n to email address %v\n", ticket, userData.emailAddress)
+	fmt.Println("*****************")
 }
