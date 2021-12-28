@@ -15,18 +15,18 @@ func main() {
 	for {
 		userTickets, firstName, lastName, emailAddress := getUserInput()
 		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, emailAddress, userTickets)
-		if isValidName && isValidEmail && isValidTicketNumber {
-			bookTickets(firstName, lastName, userTickets, emailAddress)
-			if remainingTickets == 0 {
-				fmt.Println("Conference is sold out")
-				break
-			}				
-		} else if !isValidName {
+		if !isValidName {
 			fmt.Println("Firstname or Last Name should have more than 2 characters")
 		} else if !isValidEmail {
 			fmt.Println("Invalid Email Address")
 		} else if !isValidTicketNumber {
 			fmt.Printf("required tickets %v cannot be more than remaining %v tickets", userTickets, remainingTickets)
+		} else {
+			bookTickets(firstName, lastName, userTickets, emailAddress)
+			if remainingTickets == 0 {
+				fmt.Println("Conference is sold out")
+				break
+			}
 		}
 	}
 }
